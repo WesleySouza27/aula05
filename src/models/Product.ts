@@ -9,6 +9,7 @@ import { ProductType  } from '../types/types'
 
 export class Product {
     private _id: string
+    private _avaliation: number[] = []
 
     constructor(
         private _name: string, 
@@ -17,6 +18,7 @@ export class Product {
     )
     {
         this._id = randomUUID()
+        this._avaliation = []
     }
 
     get id(){
@@ -36,23 +38,40 @@ export class Product {
     }
 
     public show(): string {
-        console.log(`${this._name} (R$ ${this._value.toFixed(2)})`);
-        this.showComments();
+        console.log(`${this._name} (R$ ${this._value.toFixed(2)})`)
+        this.showComments()
+        this.avaliationMedia()
         return "\n---------------------\n";
     }
     
 
     public showComments(): void {
-        const productComments = comments.filter((comment) => comment.product === this);
+        const productComments = comments.filter((comment) => comment.product === this)
         productComments.forEach((comment) => {
-            console.log(`  [${comment.from.userName}]: ${comment.content}`);
+            console.log(`  [${comment.from.userName}]: ${comment.content}`)
         });
     }
 
-    addComment(content: string, user: User) {
+    public addComment(content: string, user: User) {
         const newComment = new Comment(content, user, this)
         comments.push(newComment)
         console.log('Comentário adicionado com sucesso!')
+    }
+
+    public addAvalaviation(nota: number) {
+        if (nota >= 0 && nota <= 5){
+            this._avaliation.push(nota)
+            console.log(`Avaliação registrada com sucesso!`)
+        } else {
+            console.log(`A nota tem que ser de 0 à 5`)
+            return
+        }
+    }
+
+    public avaliationMedia() {
+        const avaliation: number = this._avaliation.reduce((i,nota) => i + nota, 0)
+        const media: number = avaliation / (this._avaliation.length)
+        console.log(`nota: ${media}`)
     }
 
     toJson() {
