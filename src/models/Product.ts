@@ -1,15 +1,18 @@
 import { randomUUID } from "crypto"
-import {User} from './User'
+
+import { User } from './User'
 import { Comment } from './Comment'
+import { Rating } from "./Rating"
 import { products } from "../datavase/product"
 import { comments } from '../datavase/comment'
 import { ProductType  } from '../types/types'
 
 
 
+
 export class Product {
-    private _id: string
-    private _avaliation: number[] = []
+    private readonly _id: string
+    private _rating: Rating[] = []
 
     constructor(
         private _name: string, 
@@ -18,7 +21,7 @@ export class Product {
     )
     {
         this._id = randomUUID()
-        this._avaliation = []
+        this._rating = []
     }
 
     get id(){
@@ -58,10 +61,11 @@ export class Product {
         console.log('Comentário adicionado com sucesso!')
     }
 
-    public addAvalaviation(nota: number) {
-        if (nota >= 0 && nota <= 5){
-            this._avaliation.push(nota)
-            console.log(`Avaliação registrada com sucesso!`)
+    public addAvalaviation(rate: number, user: User) {
+        if (rate >= 0 && rate <= 5){
+            const rating = new Rating(rate, user)
+            this._rating.push(rating)
+            console.log(`Avaliação de ${rate} estrelas feita por ${user.userName} registrada com sucesso!`)
         } else {
             console.log(`A nota tem que ser de 0 à 5`)
             return
@@ -69,8 +73,8 @@ export class Product {
     }
 
     public avaliationMedia() {
-        const avaliation: number = this._avaliation.reduce((i,nota) => i + nota, 0)
-        const media: number = avaliation / (this._avaliation.length)
+        const avaliation: number = this._rating.reduce((i, nota) => i + nota.value, 0)
+        const media: number = avaliation / (this._rating.length)
         console.log(`nota: ${media}`)
     }
 

@@ -2,7 +2,7 @@ import { randomUUID } from "crypto"
 import { Product } from "./Product"
 import { products } from "../datavase/product"
 export class User {
-    private id: string = randomUUID()
+    private readonly id: string = randomUUID()
     private _cart: Product[] = []
 
     constructor(

@@ -3,7 +3,7 @@ import { User } from './User'
 import { Product } from "./Product"
 
 export class Comment {
-    public _id: string = randomUUID()
+    public readonly _id: string = randomUUID()
 
     constructor(
         private _content: string,
